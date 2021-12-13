@@ -184,7 +184,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-12-13 14:21:16 / Modified: 14:48:30" itemprop="dateCreated datePublished" datetime="2021-12-13T14:21:16+08:00">2021-12-13</time>
+              <time title="Created: 2021-12-13 14:21:16 / Modified: 16:09:45" itemprop="dateCreated datePublished" datetime="2021-12-13T14:21:16+08:00">2021-12-13</time>
             </span>
 
           
@@ -207,10 +207,20 @@
 <h2 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h2><p>Hexo is an open source, convenient framework to help you quickly build your blog.</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
 
-<h1 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h1><h2 id="Initialization-Hexo"><a href="#Initialization-Hexo" class="headerlink" title="Initialization Hexo"></a>Initialization Hexo</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init myblog&lt;your project name&gt;</span><br><span class="line">cd myblog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+<h1 id="Post-blog-Steps"><a href="#Post-blog-Steps" class="headerlink" title="Post blog Steps"></a>Post blog Steps</h1><h2 id="Initialization-Hexo"><a href="#Initialization-Hexo" class="headerlink" title="Initialization Hexo"></a>Initialization Hexo</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hexo init myblog&lt;your project name&gt;</span><br><span class="line">cd myblog</span><br><span class="line">npm install</span><br><span class="line">export PATH=$PATH:~/.nvm/versions/node/v12.16.0/bin</span><br></pre></td></tr></table></figure>
 <h2 id="Create-new-page"><a href="#Create-new-page" class="headerlink" title="Create new page"></a>Create new page</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo new &quot;MyFirstBlog&quot;&lt;your blog name&gt;</span><br><span class="line"><span class="meta">#</span><span class="bash"> write your blog through *.md file.</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="Restart"><a href="#Restart" class="headerlink" title="Restart"></a>Restart</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
+
+<h1 id="Onboard-Google-Search-Console"><a href="#Onboard-Google-Search-Console" class="headerlink" title="Onboard Google Search Console"></a>Onboard Google Search Console</h1><ol>
+<li>Go to the <a target="_blank" rel="noopener" href="https://search.google.com/search-console/welcome?utm_source=about-page">Search Console Page</a>.</li>
+<li>Paste your url at <code>URL prefix</code>.</li>
+<li>Download the Html file.</li>
+<li>Put the download Html file under <code>source</code> directory.</li>
+<li>Add the <code>layout</code> Head as below: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">layout: false</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">google-site-verification: google03c774646bdb5e4a.html</span><br></pre></td></tr></table></figure></li>
+<li><code>hexo d -g</code> </li>
+</ol>
+
       
     </div>
 
