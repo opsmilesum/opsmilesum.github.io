@@ -182,7 +182,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-12-14 17:47:09 / Modified: 17:47:56" itemprop="dateCreated datePublished" datetime="2021-12-14T17:47:09+08:00">2021-12-14</time>
+              <time title="Created: 2021-12-14 17:47:09 / Modified: 17:59:03" itemprop="dateCreated datePublished" datetime="2021-12-14T17:47:09+08:00">2021-12-14</time>
             </span>
 
           
@@ -196,7 +196,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2>
+          <h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Use different ssh keys for different hosts in git.</p>
+<h2 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h2><ol>
+<li><p>Generate the keys.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;your_email@youremail.com&quot;</span><br></pre></td></tr></table></figure>
+<p>Specify the new <code>id_rsa</code> path.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Enter file in which to save the key (/Users/user/.ssh/id_rsa): /Users/user/.ssh/id_rsa_company</span><br></pre></td></tr></table></figure></li>
+<li><p>Evict the oudated Identity cache.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-add -D</span><br></pre></td></tr></table></figure></li>
+<li><p>Add ssh key</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-add ~/.ssh/id_rsa</span><br><span class="line">ssh-add ~/.ssh/id_rsa_company</span><br></pre></td></tr></table></figure></li>
+<li><p>Create ssh config.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~/.ssh</span><br><span class="line">touch config</span><br></pre></td></tr></table></figure></li>
+<li><p>Modify config.</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Company</span></span><br><span class="line"><span class="string">Host</span> <span class="string">Company</span></span><br><span class="line">    <span class="string">HostName</span> <span class="string">company.flexport.io</span></span><br><span class="line">    <span class="string">User</span> <span class="string">yourName</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">~/.ssh/id_rsa_company</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Myself</span></span><br><span class="line"><span class="string">Host</span> <span class="string">Myself</span></span><br><span class="line">    <span class="string">HostName</span> <span class="string">github.com</span></span><br><span class="line">    <span class="string">User</span> <span class="string">opsmilesum</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">~/.ssh/id_rsa</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+
       
     </div>
 
