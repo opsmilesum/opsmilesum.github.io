@@ -68,6 +68,22 @@
       </tags>
   </entry>
   <entry>
+    <title>Postgres</title>
+    <url>/2021/12/14/Postgres/</url>
+    <content><![CDATA[<h2 id="Init"><a href="#Init" class="headerlink" title="Init"></a>Init</h2><ol>
+<li>Install<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew install postgresql</span><br></pre></td></tr></table></figure></li>
+<li>Initdb<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">initdb /usr/local/var/postgres</span><br></pre></td></tr></table></figure></li>
+<li>Start<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="Update-schema"><a href="#Update-schema" class="headerlink" title="Update schema"></a>Update schema</h2><ol>
+<li>Alter column<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">alter table &quot;table_v2&quot; alter column &quot;description&quot; type text;</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Database</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Multiple SSH keys Management</title>
     <url>/2021/12/14/Multiple-SSH-keys-Management/</url>
     <content><![CDATA[<h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Use different ssh keys for different hosts in git.</p>
@@ -88,22 +104,6 @@
 ]]></content>
       <tags>
         <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Postgres</title>
-    <url>/2021/12/14/Postgres/</url>
-    <content><![CDATA[<h2 id="Init"><a href="#Init" class="headerlink" title="Init"></a>Init</h2><ol>
-<li>Install<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew install postgresql</span><br></pre></td></tr></table></figure></li>
-<li>Initdb<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">initdb /usr/local/var/postgres</span><br></pre></td></tr></table></figure></li>
-<li>Start<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="Update-schema"><a href="#Update-schema" class="headerlink" title="Update schema"></a>Update schema</h2><ol>
-<li>Alter column<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">alter table &quot;table_v2&quot; alter column &quot;description&quot; type text;</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <tags>
-        <tag>Database</tag>
       </tags>
   </entry>
   <entry>
