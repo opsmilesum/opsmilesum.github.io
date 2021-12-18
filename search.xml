@@ -58,7 +58,7 @@
     <title>Email Introduction</title>
     <url>/2021/12/16/Email-Introduction/</url>
     <content><![CDATA[<h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Introduce how Email is implemented in current Internet and related tech-skills.</p>
-<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><img src="/.io//12/16/Email-Introduction/Email.png" alt="Strature"></p>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><img src="https://opsmilesum.github.io/2021/12/16/Email-Introduction/Email.png" alt="Strature"></p>
 <h3 id="Email-Client"><a href="#Email-Client" class="headerlink" title="Email Client"></a>Email Client</h3><p>When a user wants to send/receive the email to/from a Email, he has to use the Email Cleint to interact with Email Server.</p>
 <h3 id="SMTP-Server"><a href="#SMTP-Server" class="headerlink" title="SMTP Server"></a>SMTP Server</h3><p>SMTP is a protocol to transfer Email information.<br>For example, when a Email Client wants to send a Email to the Email Server, or a Email Server(@qq.com, etc.) want to send Email to another Email Server(@163.com, etc.)</p>
 <h3 id="IMAP-POP3"><a href="#IMAP-POP3" class="headerlink" title="IMAP/POP3"></a>IMAP/POP3</h3><p>SMTP is responsible for sending email while IMAP/POP3 is responsbile for fetching Email.<br>Email Server builds a IMAP/POP3 Server to store emails, then the user can use the Email Client to access IMAP/POP3 Server to fetch Emails.</p>
