@@ -47,8 +47,9 @@
 <p>Add the sitemap to google</p>
 <ol>
 <li>By web: <code>http://www.google.com/webmasters/tools/</code></li>
-<li>By command line:<code>curl https://www.google.com/ping?sitemap=https://opsmilesum.github.io/sitemap</code></li>
+<li>By command line:</li>
 </ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">curl https://www.google.com/ping?sitemap=https://opsmilesum.github.io/sitemap</span><br></pre></td></tr></table></figure>
 ]]></content>
       <tags>
         <tag>Blog</tag>
