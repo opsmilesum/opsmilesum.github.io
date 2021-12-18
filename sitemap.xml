@@ -90,13 +90,6 @@
   </url>
   
   <url>
-    <loc>http://opsmilesum.github.io/tags/%E8%8F%9C%E8%B0%B1/</loc>
-    <lastmod>2021-12-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://opsmilesum.github.io/tags/Email/</loc>
     <lastmod>2021-12-18</lastmod>
     <changefreq>weekly</changefreq>
@@ -112,6 +105,13 @@
   
   <url>
     <loc>http://opsmilesum.github.io/tags/Database/</loc>
+    <lastmod>2021-12-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://opsmilesum.github.io/tags/%E8%8F%9C%E8%B0%B1/</loc>
     <lastmod>2021-12-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
