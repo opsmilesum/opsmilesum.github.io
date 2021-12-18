@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Build your personal blog</title>
+    <url>/2021/12/13/Build-your-personal-blog/</url>
+    <content><![CDATA[<h1 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h1><p>This documentation is to introduce how to build your personal blog by <a href="https://git-scm.com/">Git</a> and <a href="https://hexo.io/zh-cn/">Hexo</a>.</p>
+<h1 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h1><h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew install git</span><br></pre></td></tr></table></figure>
+
+<h2 id="NPM"><a href="#NPM" class="headerlink" title="NPM"></a>NPM</h2><p>NPM is the package manager for Node.</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew install npm</span><br><span class="line">npm config set registry https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+
+<h2 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h2><p>Hexo is an open source, convenient framework to help you quickly build your blog.</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<h1 id="Post-blog-Steps"><a href="#Post-blog-Steps" class="headerlink" title="Post blog Steps"></a>Post blog Steps</h1><h2 id="Initialization-Hexo"><a href="#Initialization-Hexo" class="headerlink" title="Initialization Hexo"></a>Initialization Hexo</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo init myblog&lt;your project name&gt;</span><br><span class="line">cd myblog</span><br><span class="line">npm install</span><br><span class="line">export PATH=$PATH:~/.nvm/versions/node/v12.16.0/bin</span><br></pre></td></tr></table></figure>
+
+<h2 id="Create-new-page"><a href="#Create-new-page" class="headerlink" title="Create new page"></a>Create new page</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo new &quot;MyFirstBlog&quot;&lt;your blog name&gt;</span><br><span class="line"><span class="meta">#</span><span class="bash"> write your blog through *.md file.</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Restart"><a href="#Restart" class="headerlink" title="Restart"></a>Restart</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
+
+<h1 id="Onboard-Google-Search-Console"><a href="#Onboard-Google-Search-Console" class="headerlink" title="Onboard Google Search Console"></a>Onboard Google Search Console</h1><ol>
+<li><p>Go to the <a href="https://search.google.com/search-console/welcome?utm_source=about-page">Search Console Page</a>.</p>
+</li>
+<li><p>Paste your url at <code>URL prefix</code>.</p>
+</li>
+<li><p>Download the Html file.</p>
+</li>
+<li><p>Put the download Html file under <code>source</code> directory.</p>
+</li>
+<li><p>Add the <code>layout</code> Head as below:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">layout: false</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">google-site-verification: google03c774646bdb5e4a.html</span><br></pre></td></tr></table></figure></li>
+<li><p><code>hexo d -g</code></p>
+</li>
+<li><p>Verify at the Google Search Console.</p>
+</li>
+</ol>
+<h2 id="Add-SiteMap"><a href="#Add-SiteMap" class="headerlink" title="Add SiteMap"></a>Add SiteMap</h2><p>Sitemap is to a file(Xml,etc.) to tell <code>GoogleSeaqrchEnginte</code> the structure information about the website.</p>
+<h3 id="Generate-the-Sitemap-file"><a href="#Generate-the-Sitemap-file" class="headerlink" title="Generate the Sitemap file"></a>Generate the Sitemap file</h3><p>The <a href="https://github.com/hexojs/hexo-generator-sitemap">tool</a>.</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install hexo-generator-sitemap --save</span></span><br></pre></td></tr></table></figure>
+
+<p>Modify <code>themes/next_config.yml</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || home</span><br><span class="line">  #about: /about/ || user</span><br><span class="line">  tags: /tags/ || tags</span><br><span class="line">  categories: /categories/ || th</span><br><span class="line">  archives: /archives/ || archive</span><br><span class="line">  #schedule: /schedule/ || calendar</span><br><span class="line">  sitemap: /sitemap.xml || sitemap</span><br><span class="line">  #commonweal: /404/ || heartbeat</span><br></pre></td></tr></table></figure>
+
+<p>Restart</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g</span><br></pre></td></tr></table></figure>
+
+<p>Add the sitemap to google</p>
+<ol>
+<li>By web: <code>http://www.google.com/webmasters/tools/</code></li>
+<li>By command line: <code> curl https://www.google.com/ping?sitemap=https://opsmilesum.github.io/sitemap</code></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Email Introduction</title>
+    <url>/2021/12/16/Email-Introduction/</url>
+    <content><![CDATA[<h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Introduce how Email is implemented in current Internet and related tech-skills.</p>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><img src="/.io//Email.png" alt="Strature"></p>
+<h3 id="Email-Client"><a href="#Email-Client" class="headerlink" title="Email Client"></a>Email Client</h3><p>When a user wants to send/receive the email to/from a Email, he has to use the Email Cleint to interact with Email Server.</p>
+<h3 id="SMTP-Server"><a href="#SMTP-Server" class="headerlink" title="SMTP Server"></a>SMTP Server</h3><p>SMTP is a protocol to transfer Email information.<br>For example, when a Email Client wants to send a Email to the Email Server, or a Email Server(@qq.com, etc.) want to send Email to another Email Server(@163.com, etc.)</p>
+<h3 id="IMAP-POP3"><a href="#IMAP-POP3" class="headerlink" title="IMAP/POP3"></a>IMAP/POP3</h3><p>SMTP is responsible for sending email while IMAP/POP3 is responsbile for fetching Email.<br>Email Server builds a IMAP/POP3 Server to store emails, then the user can use the Email Client to access IMAP/POP3 Server to fetch Emails.</p>
+]]></content>
+      <tags>
+        <tag>Email</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Multiple SSH keys Management</title>
+    <url>/2021/12/14/Multiple-SSH-keys-Management/</url>
+    <content><![CDATA[<h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Use different ssh keys for different hosts in git.</p>
+<h2 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h2><ol>
+<li><p>Generate the keys.</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;your_email@youremail.com&quot;</span><br></pre></td></tr></table></figure>
+<p>Specify the new <code>id_rsa</code> path.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Enter file in which to save the key (/Users/user/.ssh/id_rsa): /Users/user/.ssh/id_rsa_company</span><br></pre></td></tr></table></figure></li>
+<li><p>Evict the oudated Identity cache.</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh-add -D</span><br></pre></td></tr></table></figure></li>
+<li><p>Add ssh key</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh-add ~/.ssh/id_rsa</span><br><span class="line">ssh-add ~/.ssh/id_rsa_company</span><br></pre></td></tr></table></figure></li>
+<li><p>Create ssh config.</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd ~/.ssh</span><br><span class="line">touch config</span><br></pre></td></tr></table></figure></li>
+<li><p>Modify config.</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Company</span></span><br><span class="line"><span class="string">Host</span> <span class="string">Company</span></span><br><span class="line">    <span class="string">HostName</span> <span class="string">github.company.io</span></span><br><span class="line">    <span class="string">User</span> <span class="string">yourName</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">~/.ssh/id_rsa_company</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Myself</span></span><br><span class="line"><span class="string">Host</span> <span class="string">Myself</span></span><br><span class="line">    <span class="string">HostName</span> <span class="string">github.com</span></span><br><span class="line">    <span class="string">User</span> <span class="string">opsmilesum</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">~/.ssh/id_rsa</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Postgres</title>
+    <url>/2021/12/14/Postgres/</url>
+    <content><![CDATA[<h2 id="Init"><a href="#Init" class="headerlink" title="Init"></a>Init</h2><ol>
+<li>Install<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew install postgresql</span><br></pre></td></tr></table></figure></li>
+<li>Initdb<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">initdb /usr/local/var/postgres</span><br></pre></td></tr></table></figure></li>
+<li>Start<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="Update-schema"><a href="#Update-schema" class="headerlink" title="Update schema"></a>Update schema</h2><ol>
+<li>Alter column<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">alter table &quot;table_v2&quot; alter column &quot;description&quot; type text;</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Database</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>雪里蕻肉末</title>
+    <url>/2021/12/13/%E9%9B%AA%E9%87%8C%E8%95%BB%E8%82%89%E6%9C%AB/</url>
+    <content><![CDATA[<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li>雪里蕻洗干净</li>
+<li>热水加盐加糖，下雪里蕻焯水</li>
+<li>焯水 7 分钟，捞出</li>
+<li>雪里蕻冲凉水，洗去盐分</li>
+<li>先炒肉沫，再炒雪里蕻</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>菜谱</tag>
+      </tags>
+  </entry>
+</search>
