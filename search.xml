@@ -1,29 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Multiple SSH keys Management</title>
-    <url>/2021/12/14/Multiple-SSH-keys-Management/</url>
-    <content><![CDATA[<h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Use different ssh keys for different hosts in git.</p>
-<h2 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h2><ol>
-<li><p>Generate the keys.</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;your_email@youremail.com&quot;</span><br></pre></td></tr></table></figure>
-<p>Specify the new <code>id_rsa</code> path.</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Enter file in which to save the key (/Users/user/.ssh/id_rsa): /Users/user/.ssh/id_rsa_company</span><br></pre></td></tr></table></figure></li>
-<li><p>Evict the oudated Identity cache.</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh-add -D</span><br></pre></td></tr></table></figure></li>
-<li><p>Add ssh key</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh-add ~/.ssh/id_rsa</span><br><span class="line">ssh-add ~/.ssh/id_rsa_company</span><br></pre></td></tr></table></figure></li>
-<li><p>Create ssh config.</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd ~/.ssh</span><br><span class="line">touch config</span><br></pre></td></tr></table></figure></li>
-<li><p>Modify config.</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Company</span></span><br><span class="line"><span class="string">Host</span> <span class="string">Company</span></span><br><span class="line">    <span class="string">HostName</span> <span class="string">github.company.io</span></span><br><span class="line">    <span class="string">User</span> <span class="string">yourName</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">~/.ssh/id_rsa_company</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Myself</span></span><br><span class="line"><span class="string">Host</span> <span class="string">Myself</span></span><br><span class="line">    <span class="string">HostName</span> <span class="string">github.com</span></span><br><span class="line">    <span class="string">User</span> <span class="string">opsmilesum</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">~/.ssh/id_rsa</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Build your personal blog</title>
     <url>/2021/12/13/Build-your-personal-blog/</url>
     <content><![CDATA[<h1 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h1><p>This documentation is to introduce how to build your personal blog by <a href="https://git-scm.com/">Git</a> and <a href="https://hexo.io/zh-cn/">Hexo</a>.</p>
@@ -79,6 +56,19 @@
       </tags>
   </entry>
   <entry>
+    <title>Email Introduction</title>
+    <url>/2021/12/16/Email-Introduction/</url>
+    <content><![CDATA[<h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Introduce how Email is implemented in current Internet and related tech-skills.</p>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><img src="https://opsmilesum.github.io/2021/12/16/Email-Introduction/Email.png" alt="Strature"></p>
+<h3 id="Email-Client"><a href="#Email-Client" class="headerlink" title="Email Client"></a>Email Client</h3><p>When a user wants to send/receive the email to/from a Email, he has to use the Email Cleint to interact with Email Server.</p>
+<h3 id="SMTP-Server"><a href="#SMTP-Server" class="headerlink" title="SMTP Server"></a>SMTP Server</h3><p>SMTP is a protocol to transfer Email information.<br>For example, when a Email Client wants to send a Email to the Email Server, or a Email Server(@qq.com, etc.) want to send Email to another Email Server(@163.com, etc.)</p>
+<h3 id="IMAP-POP3"><a href="#IMAP-POP3" class="headerlink" title="IMAP/POP3"></a>IMAP/POP3</h3><p>SMTP is responsible for sending email while IMAP/POP3 is responsbile for fetching Email.<br>Email Server builds a IMAP/POP3 Server to store emails, then the user can use the Email Client to access IMAP/POP3 Server to fetch Emails.</p>
+]]></content>
+      <tags>
+        <tag>Email</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Postgres</title>
     <url>/2021/12/14/Postgres/</url>
     <content><![CDATA[<h2 id="Init"><a href="#Init" class="headerlink" title="Init"></a>Init</h2><ol>
@@ -95,19 +85,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Email Introduction</title>
-    <url>/2021/12/16/Email-Introduction/</url>
-    <content><![CDATA[<h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Introduce how Email is implemented in current Internet and related tech-skills.</p>
-<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><img src="https://opsmilesum.github.io/2021/12/16/Email-Introduction/Email.png" alt="Strature"></p>
-<h3 id="Email-Client"><a href="#Email-Client" class="headerlink" title="Email Client"></a>Email Client</h3><p>When a user wants to send/receive the email to/from a Email, he has to use the Email Cleint to interact with Email Server.</p>
-<h3 id="SMTP-Server"><a href="#SMTP-Server" class="headerlink" title="SMTP Server"></a>SMTP Server</h3><p>SMTP is a protocol to transfer Email information.<br>For example, when a Email Client wants to send a Email to the Email Server, or a Email Server(@qq.com, etc.) want to send Email to another Email Server(@163.com, etc.)</p>
-<h3 id="IMAP-POP3"><a href="#IMAP-POP3" class="headerlink" title="IMAP/POP3"></a>IMAP/POP3</h3><p>SMTP is responsible for sending email while IMAP/POP3 is responsbile for fetching Email.<br>Email Server builds a IMAP/POP3 Server to store emails, then the user can use the Email Client to access IMAP/POP3 Server to fetch Emails.</p>
-]]></content>
-      <tags>
-        <tag>Email</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>雪里蕻肉末</title>
     <url>/2021/12/13/%E9%9B%AA%E9%87%8C%E8%95%BB%E8%82%89%E6%9C%AB/</url>
     <content><![CDATA[<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
@@ -120,6 +97,45 @@
 ]]></content>
       <tags>
         <tag>菜谱</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>醋溜白菜</title>
+    <url>/2021/12/19/%E9%86%8B%E6%BA%9C%E7%99%BD%E8%8F%9C/</url>
+    <content><![CDATA[<h2 id="醋溜白茶"><a href="#醋溜白茶" class="headerlink" title="醋溜白茶"></a>醋溜白茶</h2><ol>
+<li>调汁: 两勺陈醋, 一勺生抽, 一勺蚝油, 少许盐和鸡精, 半勺淀粉.</li>
+<li>蒜切碎, 小米椒切圈.</li>
+<li>白菜切段, 分开菜梗和菜叶.</li>
+<li>锅中放大蒜和小米椒炒香.</li>
+<li>放入菜梗炒至断生, 然后放入菜叶继续翻炒.</li>
+<li>最后放入调好的汁, 即可出锅.</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>菜谱</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Multiple SSH keys Management</title>
+    <url>/2021/12/14/Multiple-SSH-keys-Management/</url>
+    <content><![CDATA[<h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Use different ssh keys for different hosts in git.</p>
+<h2 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h2><ol>
+<li><p>Generate the keys.</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;your_email@youremail.com&quot;</span><br></pre></td></tr></table></figure>
+<p>Specify the new <code>id_rsa</code> path.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Enter file in which to save the key (/Users/user/.ssh/id_rsa): /Users/user/.ssh/id_rsa_company</span><br></pre></td></tr></table></figure></li>
+<li><p>Evict the oudated Identity cache.</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh-add -D</span><br></pre></td></tr></table></figure></li>
+<li><p>Add ssh key</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh-add ~/.ssh/id_rsa</span><br><span class="line">ssh-add ~/.ssh/id_rsa_company</span><br></pre></td></tr></table></figure></li>
+<li><p>Create ssh config.</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd ~/.ssh</span><br><span class="line">touch config</span><br></pre></td></tr></table></figure></li>
+<li><p>Modify config.</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Company</span></span><br><span class="line"><span class="string">Host</span> <span class="string">Company</span></span><br><span class="line">    <span class="string">HostName</span> <span class="string">github.company.io</span></span><br><span class="line">    <span class="string">User</span> <span class="string">yourName</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">~/.ssh/id_rsa_company</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Myself</span></span><br><span class="line"><span class="string">Host</span> <span class="string">Myself</span></span><br><span class="line">    <span class="string">HostName</span> <span class="string">github.com</span></span><br><span class="line">    <span class="string">User</span> <span class="string">opsmilesum</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">~/.ssh/id_rsa</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Git</tag>
       </tags>
   </entry>
 </search>
