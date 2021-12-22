@@ -85,19 +85,11 @@
       </tags>
   </entry>
   <entry>
-    <title>雪里蕻肉末</title>
-    <url>/2021/12/13/%E9%9B%AA%E9%87%8C%E8%95%BB%E8%82%89%E6%9C%AB/</url>
-    <content><![CDATA[<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>雪里蕻洗干净</li>
-<li>热水加盐加糖，下雪里蕻焯水</li>
-<li>焯水 7 分钟，捞出</li>
-<li>雪里蕻冲凉水，洗去盐分</li>
-<li>先炒肉沫，再炒雪里蕻</li>
-</ol>
+    <title>Stream-Programming</title>
+    <url>/2021/12/23/Stream-Programming/</url>
+    <content><![CDATA[<h2 id="Stream-supplier"><a href="#Stream-supplier" class="headerlink" title="Stream supplier"></a>Stream supplier</h2><p>Provide a not-closed <code>stream</code> every time.</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Supplier&lt;Stream&lt;String&gt;&gt; streamSupplier = () -&gt; Stream.of(<span class="string">&quot;A&quot;</span>, <span class="string">&quot;B&quot;</span>, <span class="string">&quot;C&quot;</span>);</span><br><span class="line">Optional&lt;String&gt; item = streamSupplier.get().findAndy();</span><br></pre></td></tr></table></figure>
 ]]></content>
-      <tags>
-        <tag>菜谱</tag>
-      </tags>
   </entry>
   <entry>
     <title>醋溜白菜</title>
@@ -109,6 +101,21 @@
 <li>锅中放大蒜和小米椒炒香.</li>
 <li>放入菜梗炒至断生, 然后放入菜叶继续翻炒.</li>
 <li>最后放入调好的汁, 即可出锅.</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>菜谱</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>雪里蕻肉末</title>
+    <url>/2021/12/13/%E9%9B%AA%E9%87%8C%E8%95%BB%E8%82%89%E6%9C%AB/</url>
+    <content><![CDATA[<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li>雪里蕻洗干净</li>
+<li>热水加盐加糖，下雪里蕻焯水</li>
+<li>焯水 7 分钟，捞出</li>
+<li>雪里蕻冲凉水，洗去盐分</li>
+<li>先炒肉沫，再炒雪里蕻</li>
 </ol>
 ]]></content>
       <tags>
