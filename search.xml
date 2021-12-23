@@ -1,167 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title>Hibernate</title>
-    <url>/2021/12/23/Hibernate/</url>
-    <content><![CDATA[<h2 id="Introduce"><a href="#Introduce" class="headerlink" title="Introduce"></a>Introduce</h2><p>Hibernate is a ORM framework that implementes the JPA API.</p>
-<h2 id="Use-Hibernate"><a href="#Use-Hibernate" class="headerlink" title="Use Hibernate"></a>Use Hibernate</h2><h3 id="Configure-Data-Source"><a href="#Configure-Data-Source" class="headerlink" title="Configure Data Source"></a>Configure Data Source</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span></span><br><span class="line"><span class="meta">@EnableTransactionManagement</span></span><br><span class="line"><span class="meta">@PropertySource(&quot;jdbc.properties&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">DataSource <span class="title">createDataSource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Create-SessionFactory"><a href="#Create-SessionFactory" class="headerlink" title="Create SessionFactory"></a>Create SessionFactory</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">LocalSessionFactoryBean <span class="title">createSessionFactory</span><span class="params">(<span class="meta">@Autowired</span> DataSource dataSource)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> props = <span class="keyword">new</span> Properties();</span><br><span class="line">        props.setProperty(<span class="string">&quot;hibernate.hbm2ddl.auto&quot;</span>, <span class="string">&quot;update&quot;</span>);</span><br><span class="line">        props.setProperty(<span class="string">&quot;hibernate.dialect&quot;</span>, <span class="string">&quot;org.hibernate.dialect.HSQLDialect&quot;</span>);</span><br><span class="line">        props.setProperty(<span class="string">&quot;hibernate.show_sql&quot;</span>, <span class="string">&quot;true&quot;</span>);</span><br><span class="line">        <span class="keyword">var</span> sessionFactoryBean = <span class="keyword">new</span> LocalSessionFactoryBean();</span><br><span class="line">        sessionFactoryBean.setDataSource(dataSource);</span><br><span class="line">        <span class="comment">// Scan package to get entity class:</span></span><br><span class="line">        sessionFactoryBean.setPackagesToScan(<span class="string">&quot;com.itranswarp.learnjava.entity&quot;</span>);</span><br><span class="line">        sessionFactoryBean.setHibernateProperties(props);</span><br><span class="line">        <span class="keyword">return</span> sessionFactoryBean;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">HibernateTemplate <span class="title">createHibernateTemplate</span><span class="params">(<span class="meta">@Autowired</span> SessionFactory sessionFactory)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HibernateTemplate(sessionFactory);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">PlatformTransactionManager <span class="title">createTxManager</span><span class="params">(<span class="meta">@Autowired</span> SessionFactory sessionFactory)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HibernateTransactionManager(sessionFactory);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Create-Entity-Class"><a href="#Create-Entity-Class" class="headerlink" title="Create Entity Class"></a>Create Entity Class</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table(name = &quot;...&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span></span><br><span class="line">    <span class="meta">@Column(nullable = false, updatable = false)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getId</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(nullable = false, unique = true, length = 100)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getEmail</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(nullable = false, length = 100)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getPassword</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(nullable = false, length = 100)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(nullable = false, updatable = false)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getCreatedAt</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Save-Entity"><a href="#Save-Entity" class="headerlink" title="Save Entity"></a>Save Entity</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> User <span class="title">register</span><span class="params">(String email, String password, String name)</span> </span>&#123;</span><br><span class="line">    User user = <span class="keyword">new</span> User();</span><br><span class="line">    user.setEmail(email);</span><br><span class="line">    user.setPassword(password);</span><br><span class="line">    user.setName(name);</span><br><span class="line">    <span class="comment">// Don&#x27;t need to set id.</span></span><br><span class="line">    hibernateTemplate.save(user);</span><br><span class="line">    System.out.println(user.getId());</span><br><span class="line">    <span class="keyword">return</span> user;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>Spring</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Build your personal blog</title>
-    <url>/2021/12/13/Build-your-personal-blog/</url>
-    <content><![CDATA[<h1 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h1><p>This documentation is to introduce how to build your personal blog by <a href="https://git-scm.com/">Git</a> and <a href="https://hexo.io/zh-cn/">Hexo</a>.</p>
-<h1 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h1><h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew install git</span><br></pre></td></tr></table></figure>
-
-<h2 id="NPM"><a href="#NPM" class="headerlink" title="NPM"></a>NPM</h2><p>NPM is the package manager for Node.</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew install npm</span><br><span class="line">npm config set registry https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
-
-<h2 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h2><p>Hexo is an open source, convenient framework to help you quickly build your blog.</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-
-<h1 id="Post-blog-Steps"><a href="#Post-blog-Steps" class="headerlink" title="Post blog Steps"></a>Post blog Steps</h1><h2 id="Initialization-Hexo"><a href="#Initialization-Hexo" class="headerlink" title="Initialization Hexo"></a>Initialization Hexo</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo init myblog&lt;your project name&gt;</span><br><span class="line">cd myblog</span><br><span class="line">npm install</span><br><span class="line">export PATH=$PATH:~/.nvm/versions/node/v12.16.0/bin</span><br></pre></td></tr></table></figure>
-
-<h2 id="Create-new-page"><a href="#Create-new-page" class="headerlink" title="Create new page"></a>Create new page</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo new &quot;MyFirstBlog&quot;&lt;your blog name&gt;</span><br><span class="line"><span class="meta">#</span><span class="bash"> write your blog through *.md file.</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="Restart"><a href="#Restart" class="headerlink" title="Restart"></a>Restart</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
-
-<h1 id="Onboard-Google-Search-Console"><a href="#Onboard-Google-Search-Console" class="headerlink" title="Onboard Google Search Console"></a>Onboard Google Search Console</h1><ol>
-<li><p>Go to the <a href="https://search.google.com/search-console/welcome?utm_source=about-page">Search Console Page</a>.</p>
-</li>
-<li><p>Paste your url at <code>URL prefix</code>.</p>
-</li>
-<li><p>Download the Html file.</p>
-</li>
-<li><p>Put the download Html file under <code>source</code> directory.</p>
-</li>
-<li><p>Add the <code>layout</code> Head as below:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">layout: false</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">google-site-verification: google03c774646bdb5e4a.html</span><br></pre></td></tr></table></figure></li>
-<li><p><code>hexo d -g</code></p>
-</li>
-<li><p>Verify at the Google Search Console.</p>
-</li>
-</ol>
-<h2 id="Add-SiteMap"><a href="#Add-SiteMap" class="headerlink" title="Add SiteMap"></a>Add SiteMap</h2><p>Sitemap is to a file(Xml,etc.) to tell <code>GoogleSeaqrchEnginte</code> the structure information about the website.</p>
-<h3 id="Generate-the-Sitemap-file"><a href="#Generate-the-Sitemap-file" class="headerlink" title="Generate the Sitemap file"></a>Generate the Sitemap file</h3><p>The <a href="https://github.com/hexojs/hexo-generator-sitemap">tool</a>.</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install hexo-generator-sitemap --save</span></span><br></pre></td></tr></table></figure>
-
-<p>Modify <code>themes/next_config.yml</code>:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || home</span><br><span class="line">  #about: /about/ || user</span><br><span class="line">  tags: /tags/ || tags</span><br><span class="line">  categories: /categories/ || th</span><br><span class="line">  archives: /archives/ || archive</span><br><span class="line">  #schedule: /schedule/ || calendar</span><br><span class="line">  sitemap: /sitemap.xml || sitemap</span><br><span class="line">  #commonweal: /404/ || heartbeat</span><br></pre></td></tr></table></figure>
-
-<p>Restart</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g</span><br></pre></td></tr></table></figure>
-
-<p>Add the sitemap to google</p>
-<ol>
-<li>By web: <code>http://www.google.com/webmasters/tools/</code></li>
-<li>By command line:</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">curl https://www.google.com/ping?sitemap=https://opsmilesum.github.io/sitemap</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>Blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Email Introduction</title>
-    <url>/2021/12/16/Email-Introduction/</url>
-    <content><![CDATA[<h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Introduce how Email is implemented in current Internet and related tech-skills.</p>
-<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><img src="https://opsmilesum.github.io/2021/12/16/Email-Introduction/Email.png" alt="Strature"></p>
-<h3 id="Email-Client"><a href="#Email-Client" class="headerlink" title="Email Client"></a>Email Client</h3><p>When a user wants to send/receive the email to/from a Email, he has to use the Email Cleint to interact with Email Server.</p>
-<h3 id="SMTP-Server"><a href="#SMTP-Server" class="headerlink" title="SMTP Server"></a>SMTP Server</h3><p>SMTP is a protocol to transfer Email information.<br>For example, when a Email Client wants to send a Email to the Email Server, or a Email Server(@qq.com, etc.) want to send Email to another Email Server(@163.com, etc.)</p>
-<h3 id="IMAP-POP3"><a href="#IMAP-POP3" class="headerlink" title="IMAP/POP3"></a>IMAP/POP3</h3><p>SMTP is responsible for sending email while IMAP/POP3 is responsbile for fetching Email.<br>Email Server builds a IMAP/POP3 Server to store emails, then the user can use the Email Client to access IMAP/POP3 Server to fetch Emails.</p>
-]]></content>
-      <tags>
-        <tag>Email</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Multiple SSH keys Management</title>
-    <url>/2021/12/14/Multiple-SSH-keys-Management/</url>
-    <content><![CDATA[<h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Use different ssh keys for different hosts in git.</p>
-<h2 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h2><ol>
-<li><p>Generate the keys.</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;your_email@youremail.com&quot;</span><br></pre></td></tr></table></figure>
-<p>Specify the new <code>id_rsa</code> path.</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Enter file in which to save the key (/Users/user/.ssh/id_rsa): /Users/user/.ssh/id_rsa_company</span><br></pre></td></tr></table></figure></li>
-<li><p>Evict the oudated Identity cache.</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh-add -D</span><br></pre></td></tr></table></figure></li>
-<li><p>Add ssh key</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh-add ~/.ssh/id_rsa</span><br><span class="line">ssh-add ~/.ssh/id_rsa_company</span><br></pre></td></tr></table></figure></li>
-<li><p>Create ssh config.</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd ~/.ssh</span><br><span class="line">touch config</span><br></pre></td></tr></table></figure></li>
-<li><p>Modify config.</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Company</span></span><br><span class="line"><span class="string">Host</span> <span class="string">Company</span></span><br><span class="line">    <span class="string">HostName</span> <span class="string">github.company.io</span></span><br><span class="line">    <span class="string">User</span> <span class="string">yourName</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">~/.ssh/id_rsa_company</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Myself</span></span><br><span class="line"><span class="string">Host</span> <span class="string">Myself</span></span><br><span class="line">    <span class="string">HostName</span> <span class="string">github.com</span></span><br><span class="line">    <span class="string">User</span> <span class="string">opsmilesum</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">~/.ssh/id_rsa</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Postgres</title>
-    <url>/2021/12/14/Postgres/</url>
-    <content><![CDATA[<h2 id="Init"><a href="#Init" class="headerlink" title="Init"></a>Init</h2><ol>
-<li>Install<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew install postgresql</span><br></pre></td></tr></table></figure></li>
-<li>Initdb<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">initdb /usr/local/var/postgres</span><br></pre></td></tr></table></figure></li>
-<li>Start<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="Update-schema"><a href="#Update-schema" class="headerlink" title="Update schema"></a>Update schema</h2><ol>
-<li>Alter column<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">alter table &quot;table_v2&quot; alter column &quot;description&quot; type text;</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <tags>
-        <tag>Database</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Stream-Programming</title>
-    <url>/2021/12/23/Stream-Programming/</url>
-    <content><![CDATA[<h2 id="Stream-supplier"><a href="#Stream-supplier" class="headerlink" title="Stream supplier"></a>Stream supplier</h2><p>Provide a not-closed <code>stream</code> every time.</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Supplier&lt;Stream&lt;String&gt;&gt; streamSupplier = () -&gt; Stream.of(<span class="string">&quot;A&quot;</span>, <span class="string">&quot;B&quot;</span>, <span class="string">&quot;C&quot;</span>);</span><br><span class="line">Optional&lt;String&gt; item = streamSupplier.get().findAndy();</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>醋溜白菜</title>
-    <url>/2021/12/19/%E9%86%8B%E6%BA%9C%E7%99%BD%E8%8F%9C/</url>
-    <content><![CDATA[<h2 id="醋溜白茶"><a href="#醋溜白茶" class="headerlink" title="醋溜白茶"></a>醋溜白茶</h2><ol>
-<li>调汁: 两勺陈醋, 一勺生抽, 一勺蚝油, 少许盐和鸡精, 半勺淀粉.</li>
-<li>蒜切碎, 小米椒切圈.</li>
-<li>白菜切段, 分开菜梗和菜叶.</li>
-<li>锅中放大蒜和小米椒炒香.</li>
-<li>放入菜梗炒至断生, 然后放入菜叶继续翻炒.</li>
-<li>最后放入调好的汁, 即可出锅.</li>
-</ol>
-]]></content>
-      <tags>
-        <tag>菜谱</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>雪里蕻肉末</title>
-    <url>/2021/12/13/%E9%9B%AA%E9%87%8C%E8%95%BB%E8%82%89%E6%9C%AB/</url>
-    <content><![CDATA[<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>雪里蕻洗干净</li>
-<li>热水加盐加糖，下雪里蕻焯水</li>
-<li>焯水 7 分钟，捞出</li>
-<li>雪里蕻冲凉水，洗去盐分</li>
-<li>先炒肉沫，再炒雪里蕻</li>
-</ol>
-]]></content>
-      <tags>
-        <tag>菜谱</tag>
-      </tags>
-  </entry>
+<search> 
+  
+  
+    
+    <entry>
+      <title>Hibernate</title>
+      <link href="/2021/12/23/Hibernate/"/>
+      <url>/2021/12/23/Hibernate/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Introduce"><a href="#Introduce" class="headerlink" title="Introduce"></a>Introduce</h2><p>Hibernate is a ORM framework that implementes the JPA API.</p><h2 id="Use-Hibernate"><a href="#Use-Hibernate" class="headerlink" title="Use Hibernate"></a>Use Hibernate</h2><h3 id="Configure-Data-Source"><a href="#Configure-Data-Source" class="headerlink" title="Configure Data Source"></a>Configure Data Source</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span></span><br><span class="line"><span class="meta">@EnableTransactionManagement</span></span><br><span class="line"><span class="meta">@PropertySource(&quot;jdbc.properties&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">DataSource <span class="title">createDataSource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="Create-SessionFactory"><a href="#Create-SessionFactory" class="headerlink" title="Create SessionFactory"></a>Create SessionFactory</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">LocalSessionFactoryBean <span class="title">createSessionFactory</span><span class="params">(<span class="meta">@Autowired</span> DataSource dataSource)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> props = <span class="keyword">new</span> Properties();</span><br><span class="line">        props.setProperty(<span class="string">&quot;hibernate.hbm2ddl.auto&quot;</span>, <span class="string">&quot;update&quot;</span>);</span><br><span class="line">        props.setProperty(<span class="string">&quot;hibernate.dialect&quot;</span>, <span class="string">&quot;org.hibernate.dialect.HSQLDialect&quot;</span>);</span><br><span class="line">        props.setProperty(<span class="string">&quot;hibernate.show_sql&quot;</span>, <span class="string">&quot;true&quot;</span>);</span><br><span class="line">        <span class="keyword">var</span> sessionFactoryBean = <span class="keyword">new</span> LocalSessionFactoryBean();</span><br><span class="line">        sessionFactoryBean.setDataSource(dataSource);</span><br><span class="line">        <span class="comment">// Scan package to get entity class:</span></span><br><span class="line">        sessionFactoryBean.setPackagesToScan(<span class="string">&quot;com.itranswarp.learnjava.entity&quot;</span>);</span><br><span class="line">        sessionFactoryBean.setHibernateProperties(props);</span><br><span class="line">        <span class="keyword">return</span> sessionFactoryBean;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">HibernateTemplate <span class="title">createHibernateTemplate</span><span class="params">(<span class="meta">@Autowired</span> SessionFactory sessionFactory)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HibernateTemplate(sessionFactory);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">PlatformTransactionManager <span class="title">createTxManager</span><span class="params">(<span class="meta">@Autowired</span> SessionFactory sessionFactory)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HibernateTransactionManager(sessionFactory);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="Create-Entity-Class"><a href="#Create-Entity-Class" class="headerlink" title="Create Entity Class"></a>Create Entity Class</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table(name = &quot;...&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span></span><br><span class="line">    <span class="meta">@Column(nullable = false, updatable = false)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getId</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(nullable = false, unique = true, length = 100)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getEmail</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(nullable = false, length = 100)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getPassword</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(nullable = false, length = 100)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(nullable = false, updatable = false)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getCreatedAt</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="Save-Entity"><a href="#Save-Entity" class="headerlink" title="Save Entity"></a>Save Entity</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> User <span class="title">register</span><span class="params">(String email, String password, String name)</span> </span>&#123;</span><br><span class="line">    User user = <span class="keyword">new</span> User();</span><br><span class="line">    user.setEmail(email);</span><br><span class="line">    user.setPassword(password);</span><br><span class="line">    user.setName(name);</span><br><span class="line">    <span class="comment">// Don&#x27;t need to set id.s</span></span><br><span class="line">    hibernateTemplate.save(user);</span><br><span class="line">    System.out.println(user.getId());</span><br><span class="line">    <span class="keyword">return</span> user;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Spring </tag>
+            
+            <tag> Database </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Stream-Programming</title>
+      <link href="/2021/12/23/Stream-Programming/"/>
+      <url>/2021/12/23/Stream-Programming/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Stream-supplier"><a href="#Stream-supplier" class="headerlink" title="Stream supplier"></a>Stream supplier</h2><p>Provide a not-closed <code>stream</code> every time.</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Supplier&lt;Stream&lt;String&gt;&gt; streamSupplier = () -&gt; Stream.of(<span class="string">&quot;A&quot;</span>, <span class="string">&quot;B&quot;</span>, <span class="string">&quot;C&quot;</span>);</span><br><span class="line">Optional&lt;String&gt; item = streamSupplier.get().findAndy();</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>醋溜白菜</title>
+      <link href="/2021/12/19/%E9%86%8B%E6%BA%9C%E7%99%BD%E8%8F%9C/"/>
+      <url>/2021/12/19/%E9%86%8B%E6%BA%9C%E7%99%BD%E8%8F%9C/</url>
+      
+        <content type="html"><![CDATA[<h2 id="醋溜白茶"><a href="#醋溜白茶" class="headerlink" title="醋溜白茶"></a>醋溜白茶</h2><ol><li>调汁: 两勺陈醋, 一勺生抽, 一勺蚝油, 少许盐和鸡精, 半勺淀粉.</li><li>蒜切碎, 小米椒切圈.</li><li>白菜切段, 分开菜梗和菜叶.</li><li>锅中放大蒜和小米椒炒香.</li><li>放入菜梗炒至断生, 然后放入菜叶继续翻炒.</li><li>最后放入调好的汁, 即可出锅.</li></ol>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 菜谱 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Email Introduction</title>
+      <link href="/2021/12/16/Email-Introduction/"/>
+      <url>/2021/12/16/Email-Introduction/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Introduce how Email is implemented in current Internet and related tech-skills.</p><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><img src="https://opsmilesum.github.io/2021/12/16/Email-Introduction/Email.png" alt="Strature"></p><h3 id="Email-Client"><a href="#Email-Client" class="headerlink" title="Email Client"></a>Email Client</h3><p>When a user wants to send/receive the email to/from a Email, he has to use the Email Cleint to interact with Email Server.</p><h3 id="SMTP-Server"><a href="#SMTP-Server" class="headerlink" title="SMTP Server"></a>SMTP Server</h3><p>SMTP is a protocol to transfer Email information.<br>For example, when a Email Client wants to send a Email to the Email Server, or a Email Server(@qq.com, etc.) want to send Email to another Email Server(@163.com, etc.)</p><h3 id="IMAP-POP3"><a href="#IMAP-POP3" class="headerlink" title="IMAP/POP3"></a>IMAP/POP3</h3><p>SMTP is responsible for sending email while IMAP/POP3 is responsbile for fetching Email.<br>Email Server builds a IMAP/POP3 Server to store emails, then the user can use the Email Client to access IMAP/POP3 Server to fetch Emails.</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Email </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Multiple SSH keys Management</title>
+      <link href="/2021/12/14/Multiple-SSH-keys-Management/"/>
+      <url>/2021/12/14/Multiple-SSH-keys-Management/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Use different ssh keys for different hosts in git.</p><h2 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h2><ol><li><p>Generate the keys.</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;your_email@youremail.com&quot;</span><br></pre></td></tr></table></figure><p>Specify the new <code>id_rsa</code> path.</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Enter file in which to save the key (/Users/user/.ssh/id_rsa): /Users/user/.ssh/id_rsa_company</span><br></pre></td></tr></table></figure></li><li><p>Evict the oudated Identity cache.</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-add -D</span><br></pre></td></tr></table></figure></li><li><p>Add ssh key</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-add ~/.ssh/id_rsa</span><br><span class="line">ssh-add ~/.ssh/id_rsa_company</span><br></pre></td></tr></table></figure></li><li><p>Create ssh config.</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~/.ssh</span><br><span class="line">touch config</span><br></pre></td></tr></table></figure></li><li><p>Modify config.</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Company</span></span><br><span class="line"><span class="string">Host</span> <span class="string">Company</span></span><br><span class="line">    <span class="string">HostName</span> <span class="string">github.company.io</span></span><br><span class="line">    <span class="string">User</span> <span class="string">yourName</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">~/.ssh/id_rsa_company</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Myself</span></span><br><span class="line"><span class="string">Host</span> <span class="string">Myself</span></span><br><span class="line">    <span class="string">HostName</span> <span class="string">github.com</span></span><br><span class="line">    <span class="string">User</span> <span class="string">opsmilesum</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">~/.ssh/id_rsa</span></span><br></pre></td></tr></table></figure></li></ol>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Git </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Postgres</title>
+      <link href="/2021/12/14/Postgres/"/>
+      <url>/2021/12/14/Postgres/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Init"><a href="#Init" class="headerlink" title="Init"></a>Init</h2><ol><li>Install<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install postgresql</span><br></pre></td></tr></table></figure></li><li>Initdb<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">initdb /usr/local/var/postgres</span><br></pre></td></tr></table></figure></li><li>Start<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres</span><br></pre></td></tr></table></figure></li></ol><h2 id="Update-schema"><a href="#Update-schema" class="headerlink" title="Update schema"></a>Update schema</h2><ol><li>Alter column<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table &quot;table_v2&quot; alter column &quot;description&quot; type text;</span><br></pre></td></tr></table></figure></li></ol>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Database </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>雪里蕻肉末</title>
+      <link href="/2021/12/13/%E9%9B%AA%E9%87%8C%E8%95%BB%E8%82%89%E6%9C%AB/"/>
+      <url>/2021/12/13/%E9%9B%AA%E9%87%8C%E8%95%BB%E8%82%89%E6%9C%AB/</url>
+      
+        <content type="html"><![CDATA[<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol><li>雪里蕻洗干净</li><li>热水加盐加糖，下雪里蕻焯水</li><li>焯水 7 分钟，捞出</li><li>雪里蕻冲凉水，洗去盐分</li><li>先炒肉沫，再炒雪里蕻</li></ol>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 菜谱 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Build your personal blog</title>
+      <link href="/2021/12/13/Build-your-personal-blog/"/>
+      <url>/2021/12/13/Build-your-personal-blog/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h1><p>This documentation is to introduce how to build your personal blog by <a href="https://git-scm.com/">Git</a> and <a href="https://hexo.io/zh-cn/">Hexo</a>.</p><h1 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h1><h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install git</span><br></pre></td></tr></table></figure><h2 id="NPM"><a href="#NPM" class="headerlink" title="NPM"></a>NPM</h2><p>NPM is the package manager for Node.</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew install npm</span><br><span class="line">npm config set registry https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure><h2 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h2><p>Hexo is an open source, convenient framework to help you quickly build your blog.</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure><h1 id="Post-blog-Steps"><a href="#Post-blog-Steps" class="headerlink" title="Post blog Steps"></a>Post blog Steps</h1><h2 id="Initialization-Hexo"><a href="#Initialization-Hexo" class="headerlink" title="Initialization Hexo"></a>Initialization Hexo</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hexo init myblog&lt;your project name&gt;</span><br><span class="line">cd myblog</span><br><span class="line">npm install</span><br><span class="line">export PATH=$PATH:~/.nvm/versions/node/v12.16.0/bin</span><br></pre></td></tr></table></figure><h2 id="Create-new-page"><a href="#Create-new-page" class="headerlink" title="Create new page"></a>Create new page</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo new &quot;MyFirstBlog&quot;&lt;your blog name&gt;</span><br><span class="line"><span class="meta">#</span><span class="bash"> write your blog through *.md file.</span></span><br></pre></td></tr></table></figure><h3 id="Restart"><a href="#Restart" class="headerlink" title="Restart"></a>Restart</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure><h1 id="Onboard-Google-Search-Console"><a href="#Onboard-Google-Search-Console" class="headerlink" title="Onboard Google Search Console"></a>Onboard Google Search Console</h1><ol><li><p>Go to the <a href="https://search.google.com/search-console/welcome?utm_source=about-page">Search Console Page</a>.</p></li><li><p>Paste your url at <code>URL prefix</code>.</p></li><li><p>Download the Html file.</p></li><li><p>Put the download Html file under <code>source</code> directory.</p></li><li><p>Add the <code>layout</code> Head as below:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">layout: false</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">google-site-verification: google03c774646bdb5e4a.html</span><br></pre></td></tr></table></figure></li><li><p><code>hexo d -g</code></p></li><li><p>Verify at the Google Search Console.</p></li></ol><h2 id="Add-SiteMap"><a href="#Add-SiteMap" class="headerlink" title="Add SiteMap"></a>Add SiteMap</h2><p>Sitemap is to a file(Xml,etc.) to tell <code>GoogleSeaqrchEnginte</code> the structure information about the website.</p><h3 id="Generate-the-Sitemap-file"><a href="#Generate-the-Sitemap-file" class="headerlink" title="Generate the Sitemap file"></a>Generate the Sitemap file</h3><p>The <a href="https://github.com/hexojs/hexo-generator-sitemap">tool</a>.</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install hexo-generator-sitemap --save</span></span><br></pre></td></tr></table></figure><p>Modify <code>themes/next_config.yml</code>:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || home</span><br><span class="line">  #about: /about/ || user</span><br><span class="line">  tags: /tags/ || tags</span><br><span class="line">  categories: /categories/ || th</span><br><span class="line">  archives: /archives/ || archive</span><br><span class="line">  #schedule: /schedule/ || calendar</span><br><span class="line">  sitemap: /sitemap.xml || sitemap</span><br><span class="line">  #commonweal: /404/ || heartbeat</span><br></pre></td></tr></table></figure><p>Restart</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g</span><br></pre></td></tr></table></figure><p>Add the sitemap to google</p><ol><li>By web: <code>http://www.google.com/webmasters/tools/</code></li><li>By command line:</li></ol><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://www.google.com/ping?sitemap=https://opsmilesum.github.io/sitemap</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Blog </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
 </search>
