@@ -165,4 +165,38 @@
         <tag>菜谱</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Entity Lifecycle</title>
+    <url>/2021/12/27/Entity-Lifecycle/</url>
+    <content><![CDATA[<h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><h3 id="Persistence-Context"><a href="#Persistence-Context" class="headerlink" title="Persistence Context"></a>Persistence Context</h3><p><strong>Persistence Context</strong> is the middle layer between Database with Business Code. It’s a staging area for:</p>
+<ul>
+    <li>Convert the Database Row to Entity.</li>
+    <li>Ready for the Client to read Entity.</li>
+    <li>The alerted Entity by business code.</li>
+</ul>
+
+<h3 id="Lifecycle"><a href="#Lifecycle" class="headerlink" title="Lifecycle"></a>Lifecycle</h3><h4 id="Managed-Entity"><a href="#Managed-Entity" class="headerlink" title="Managed Entity"></a>Managed Entity</h4><p>A managed entity is a representation of a database table row.</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Session session = sessionFactory.openSession();</span><br><span class="line">assertThat(getManagedEntities(session)).isEmpty();</span><br><span class="line"></span><br><span class="line">List&lt;FootballPlayer&gt; players = s.createQuery(<span class="string">&quot;from FootballPlayer&quot;</span>).getResultList();</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="Detached-Entity"><a href="#Detached-Entity" class="headerlink" title="Detached Entity"></a>Detached Entity</h4><p>A detached entity is a Entity POJO corresponds to a decision table row, but not tracked by the Persistence Context.<br>A managed entity can converted into detached entity by below ways:</p>
+<ol>
+    <li>The Session creates the entity is closed.</li>
+    <li>Call Session.evict(entity) or Session.clear()</li>
+</ol>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">FootballPlayer cr7 = session.get(FootballPlayer.class, <span class="number">1L</span>);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">1</span>);</span><br><span class="line">assertThat(getManagedEntities(session).get(<span class="number">0</span>).getId()).isEqualTo(cr7.getId());</span><br><span class="line"></span><br><span class="line">session.evict(cr7);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>But when <code>Session.update()</code> or <code>Session.merge()</code> called, the entity will be tracked by Persistence Context again.</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">FootballPlayer messi = session.get(FootballPlayer.class, <span class="number">2L</span>);</span><br><span class="line"></span><br><span class="line">session.evict(messi);</span><br><span class="line">messi.setName(<span class="string">&quot;Leo Messi&quot;</span>);</span><br><span class="line">transaction.commit();</span><br><span class="line"></span><br><span class="line">assertThat(getDirtyEntities()).isEmpty();</span><br><span class="line"></span><br><span class="line">transaction = startTransaction(session);</span><br><span class="line">session.update(messi);</span><br><span class="line">transaction.commit();</span><br><span class="line"></span><br><span class="line">assertThat(getDirtyEntities()).size().isEqualTo(<span class="number">1</span>);</span><br><span class="line">assertThat(getDirtyEntities().get(<span class="number">0</span>).getName()).isEqualTo(<span class="string">&quot;Leo Messi&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="Transient-entity"><a href="#Transient-entity" class="headerlink" title="Transient entity"></a>Transient entity</h3><p>A entity POJO that not exist in the Persistent Context store and not managed.<br>A typical example is to create a instance by constructor.<br>To make a transient entity persistent, we need to call <code>Session.save(entity)</code> or <code>Session.saveOrUpdate(entity)</code>:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">FootballPlayer neymar = <span class="keyword">new</span> FootballPlayer();</span><br><span class="line">neymar.setName(<span class="string">&quot;Neymar&quot;</span>);</span><br><span class="line">session.save(neymar);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">1</span>);</span><br><span class="line">assertThat(neymar.getId()).isNotNull();</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> count = queryCount(<span class="string">&quot;select count(*) from Football_Player where name=&#x27;Neymar&#x27;&quot;</span>);</span><br><span class="line"></span><br><span class="line">assertThat(count).isEqualTo(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">transaction.commit();</span><br><span class="line">count = queryCount(<span class="string">&quot;select count(*) from Football_Player where name=&#x27;Neymar&#x27;&quot;</span>);</span><br><span class="line"></span><br><span class="line">assertThat(count).isEqualTo(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="Deleted-Entity"><a href="#Deleted-Entity" class="headerlink" title="Deleted Entity"></a>Deleted Entity</h3><p><code>Session.delete</code> is called.</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">session.delete(neymar);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session).get(<span class="number">0</span>).getStatus()).isEqualTo(Status.DELETED);</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>Database</tag>
+      </tags>
+  </entry>
 </search>

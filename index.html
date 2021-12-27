@@ -153,6 +153,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://opsmilesum.github.io/2021/12/27/Entity-Lifecycle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="OP">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OpSmilesum">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/27/Entity-Lifecycle/" class="post-title-link" itemprop="url">Entity Lifecycle</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-12-27 13:41:52 / Modified: 15:24:33" itemprop="dateCreated datePublished" datetime="2021-12-27T13:41:52+08:00">2021-12-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><h3 id="Persistence-Context"><a href="#Persistence-Context" class="headerlink" title="Persistence Context"></a>Persistence Context</h3><p><strong>Persistence Context</strong> is the middle layer between Database with Business Code. It’s a staging area for:</p>
+<ul>
+    <li>Convert the Database Row to Entity.</li>
+    <li>Ready for the Client to read Entity.</li>
+    <li>The alerted Entity by business code.</li>
+</ul>
+
+<h3 id="Lifecycle"><a href="#Lifecycle" class="headerlink" title="Lifecycle"></a>Lifecycle</h3><h4 id="Managed-Entity"><a href="#Managed-Entity" class="headerlink" title="Managed Entity"></a>Managed Entity</h4><p>A managed entity is a representation of a database table row.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Session session = sessionFactory.openSession();</span><br><span class="line">assertThat(getManagedEntities(session)).isEmpty();</span><br><span class="line"></span><br><span class="line">List&lt;FootballPlayer&gt; players = s.createQuery(<span class="string">&quot;from FootballPlayer&quot;</span>).getResultList();</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="Detached-Entity"><a href="#Detached-Entity" class="headerlink" title="Detached Entity"></a>Detached Entity</h4><p>A detached entity is a Entity POJO corresponds to a decision table row, but not tracked by the Persistence Context.<br>A managed entity can converted into detached entity by below ways:</p>
+<ol>
+    <li>The Session creates the entity is closed.</li>
+    <li>Call Session.evict(entity) or Session.clear()</li>
+</ol>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">FootballPlayer cr7 = session.get(FootballPlayer.class, <span class="number">1L</span>);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">1</span>);</span><br><span class="line">assertThat(getManagedEntities(session).get(<span class="number">0</span>).getId()).isEqualTo(cr7.getId());</span><br><span class="line"></span><br><span class="line">session.evict(cr7);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>But when <code>Session.update()</code> or <code>Session.merge()</code> called, the entity will be tracked by Persistence Context again.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">FootballPlayer messi = session.get(FootballPlayer.class, <span class="number">2L</span>);</span><br><span class="line"></span><br><span class="line">session.evict(messi);</span><br><span class="line">messi.setName(<span class="string">&quot;Leo Messi&quot;</span>);</span><br><span class="line">transaction.commit();</span><br><span class="line"></span><br><span class="line">assertThat(getDirtyEntities()).isEmpty();</span><br><span class="line"></span><br><span class="line">transaction = startTransaction(session);</span><br><span class="line">session.update(messi);</span><br><span class="line">transaction.commit();</span><br><span class="line"></span><br><span class="line">assertThat(getDirtyEntities()).size().isEqualTo(<span class="number">1</span>);</span><br><span class="line">assertThat(getDirtyEntities().get(<span class="number">0</span>).getName()).isEqualTo(<span class="string">&quot;Leo Messi&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="Transient-entity"><a href="#Transient-entity" class="headerlink" title="Transient entity"></a>Transient entity</h3><p>A entity POJO that not exist in the Persistent Context store and not managed.<br>A typical example is to create a instance by constructor.<br>To make a transient entity persistent, we need to call <code>Session.save(entity)</code> or <code>Session.saveOrUpdate(entity)</code>:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">FootballPlayer neymar = <span class="keyword">new</span> FootballPlayer();</span><br><span class="line">neymar.setName(<span class="string">&quot;Neymar&quot;</span>);</span><br><span class="line">session.save(neymar);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">1</span>);</span><br><span class="line">assertThat(neymar.getId()).isNotNull();</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> count = queryCount(<span class="string">&quot;select count(*) from Football_Player where name=&#x27;Neymar&#x27;&quot;</span>);</span><br><span class="line"></span><br><span class="line">assertThat(count).isEqualTo(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">transaction.commit();</span><br><span class="line">count = queryCount(<span class="string">&quot;select count(*) from Football_Player where name=&#x27;Neymar&#x27;&quot;</span>);</span><br><span class="line"></span><br><span class="line">assertThat(count).isEqualTo(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="Deleted-Entity"><a href="#Deleted-Entity" class="headerlink" title="Deleted Entity"></a>Deleted Entity</h3><p><code>Session.delete</code> is called.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">session.delete(neymar);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session).get(<span class="number">0</span>).getStatus()).isEqualTo(Status.DELETED);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://opsmilesum.github.io/2021/12/23/Hibernate/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -808,7 +892,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
