@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Email Introduction</title>
+    <url>/2021/12/16/Email-Introduction/</url>
+    <content><![CDATA[<h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Introduce how Email is implemented in current Internet and related tech-skills.</p>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><img src="https://opsmilesum.github.io/2021/12/16/Email-Introduction/Email.png" alt="Strature"></p>
+<h3 id="Email-Client"><a href="#Email-Client" class="headerlink" title="Email Client"></a>Email Client</h3><p>When a user wants to send/receive the email to/from a Email, he has to use the Email Cleint to interact with Email Server.</p>
+<h3 id="SMTP-Server"><a href="#SMTP-Server" class="headerlink" title="SMTP Server"></a>SMTP Server</h3><p>SMTP is a protocol to transfer Email information.<br>For example, when a Email Client wants to send a Email to the Email Server, or a Email Server(@qq.com, etc.) want to send Email to another Email Server(@163.com, etc.)</p>
+<h3 id="IMAP-POP3"><a href="#IMAP-POP3" class="headerlink" title="IMAP/POP3"></a>IMAP/POP3</h3><p>SMTP is responsible for sending email while IMAP/POP3 is responsbile for fetching Email.<br>Email Server builds a IMAP/POP3 Server to store emails, then the user can use the Email Client to access IMAP/POP3 Server to fetch Emails.</p>
+]]></content>
+      <tags>
+        <tag>Email</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Build your personal blog</title>
     <url>/2021/12/13/Build-your-personal-blog/</url>
     <content><![CDATA[<h1 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h1><p>This documentation is to introduce how to build your personal blog by <a href="https://git-scm.com/">Git</a> and <a href="https://hexo.io/zh-cn/">Hexo</a>.</p>
@@ -56,16 +69,37 @@
       </tags>
   </entry>
   <entry>
-    <title>Email Introduction</title>
-    <url>/2021/12/16/Email-Introduction/</url>
-    <content><![CDATA[<h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Introduce how Email is implemented in current Internet and related tech-skills.</p>
-<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><img src="https://opsmilesum.github.io/2021/12/16/Email-Introduction/Email.png" alt="Strature"></p>
-<h3 id="Email-Client"><a href="#Email-Client" class="headerlink" title="Email Client"></a>Email Client</h3><p>When a user wants to send/receive the email to/from a Email, he has to use the Email Cleint to interact with Email Server.</p>
-<h3 id="SMTP-Server"><a href="#SMTP-Server" class="headerlink" title="SMTP Server"></a>SMTP Server</h3><p>SMTP is a protocol to transfer Email information.<br>For example, when a Email Client wants to send a Email to the Email Server, or a Email Server(@qq.com, etc.) want to send Email to another Email Server(@163.com, etc.)</p>
-<h3 id="IMAP-POP3"><a href="#IMAP-POP3" class="headerlink" title="IMAP/POP3"></a>IMAP/POP3</h3><p>SMTP is responsible for sending email while IMAP/POP3 is responsbile for fetching Email.<br>Email Server builds a IMAP/POP3 Server to store emails, then the user can use the Email Client to access IMAP/POP3 Server to fetch Emails.</p>
+    <title>Entity Lifecycle</title>
+    <url>/2021/12/27/Entity-Lifecycle/</url>
+    <content><![CDATA[<h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><h3 id="Persistence-Context"><a href="#Persistence-Context" class="headerlink" title="Persistence Context"></a>Persistence Context</h3><p><strong>Persistence Context</strong> is the middle layer between Database with Business Code. It’s a staging area for:</p>
+<ul>
+    <li>Convert the Database Row to Entity.</li>
+    <li>Ready for the Client to read Entity.</li>
+    <li>The alerted Entity by business code.</li>
+</ul>
+
+<h3 id="Lifecycle"><a href="#Lifecycle" class="headerlink" title="Lifecycle"></a>Lifecycle</h3><h4 id="Managed-Entity"><a href="#Managed-Entity" class="headerlink" title="Managed Entity"></a>Managed Entity</h4><p>A managed entity is a representation of a database table row.</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Session session = sessionFactory.openSession();</span><br><span class="line">assertThat(getManagedEntities(session)).isEmpty();</span><br><span class="line"></span><br><span class="line">List&lt;FootballPlayer&gt; players = s.createQuery(<span class="string">&quot;from FootballPlayer&quot;</span>).getResultList();</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="Detached-Entity"><a href="#Detached-Entity" class="headerlink" title="Detached Entity"></a>Detached Entity</h4><p>A detached entity is a Entity POJO corresponds to a decision table row, but not tracked by the Persistence Context.<br>A managed entity can converted into detached entity by below ways:</p>
+<ol>
+    <li>The Session creates the entity is closed.</li>
+    <li>Call Session.evict(entity) or Session.clear()</li>
+</ol>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">FootballPlayer cr7 = session.get(FootballPlayer.class, <span class="number">1L</span>);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">1</span>);</span><br><span class="line">assertThat(getManagedEntities(session).get(<span class="number">0</span>).getId()).isEqualTo(cr7.getId());</span><br><span class="line"></span><br><span class="line">session.evict(cr7);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>But when <code>Session.update()</code> or <code>Session.merge()</code> called, the entity will be tracked by Persistence Context again.</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">FootballPlayer messi = session.get(FootballPlayer.class, <span class="number">2L</span>);</span><br><span class="line"></span><br><span class="line">session.evict(messi);</span><br><span class="line">messi.setName(<span class="string">&quot;Leo Messi&quot;</span>);</span><br><span class="line">transaction.commit();</span><br><span class="line"></span><br><span class="line">assertThat(getDirtyEntities()).isEmpty();</span><br><span class="line"></span><br><span class="line">transaction = startTransaction(session);</span><br><span class="line">session.update(messi);</span><br><span class="line">transaction.commit();</span><br><span class="line"></span><br><span class="line">assertThat(getDirtyEntities()).size().isEqualTo(<span class="number">1</span>);</span><br><span class="line">assertThat(getDirtyEntities().get(<span class="number">0</span>).getName()).isEqualTo(<span class="string">&quot;Leo Messi&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="Transient-entity"><a href="#Transient-entity" class="headerlink" title="Transient entity"></a>Transient entity</h3><p>A entity POJO that not exist in the Persistent Context store and not managed.<br>A typical example is to create a instance by constructor.<br>To make a transient entity persistent, we need to call <code>Session.save(entity)</code> or <code>Session.saveOrUpdate(entity)</code>:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">FootballPlayer neymar = <span class="keyword">new</span> FootballPlayer();</span><br><span class="line">neymar.setName(<span class="string">&quot;Neymar&quot;</span>);</span><br><span class="line">session.save(neymar);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">1</span>);</span><br><span class="line">assertThat(neymar.getId()).isNotNull();</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> count = queryCount(<span class="string">&quot;select count(*) from Football_Player where name=&#x27;Neymar&#x27;&quot;</span>);</span><br><span class="line"></span><br><span class="line">assertThat(count).isEqualTo(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">transaction.commit();</span><br><span class="line">count = queryCount(<span class="string">&quot;select count(*) from Football_Player where name=&#x27;Neymar&#x27;&quot;</span>);</span><br><span class="line"></span><br><span class="line">assertThat(count).isEqualTo(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="Deleted-Entity"><a href="#Deleted-Entity" class="headerlink" title="Deleted Entity"></a>Deleted Entity</h3><p><code>Session.delete</code> is called.</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">session.delete(neymar);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session).get(<span class="number">0</span>).getStatus()).isEqualTo(Status.DELETED);</span><br></pre></td></tr></table></figure>
 ]]></content>
       <tags>
-        <tag>Email</tag>
+        <tag>Database</tag>
       </tags>
   </entry>
   <entry>
@@ -81,8 +115,8 @@
 <h3 id="Save-Entity"><a href="#Save-Entity" class="headerlink" title="Save Entity"></a>Save Entity</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> User <span class="title">register</span><span class="params">(String email, String password, String name)</span> </span>&#123;</span><br><span class="line">    User user = <span class="keyword">new</span> User();</span><br><span class="line">    user.setEmail(email);</span><br><span class="line">    user.setPassword(password);</span><br><span class="line">    user.setName(name);</span><br><span class="line">    <span class="comment">// Don&#x27;t need to set id.s</span></span><br><span class="line">    hibernateTemplate.save(user);</span><br><span class="line">    System.out.println(user.getId());</span><br><span class="line">    <span class="keyword">return</span> user;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <tags>
-        <tag>Spring</tag>
         <tag>Database</tag>
+        <tag>Spring</tag>
       </tags>
   </entry>
   <entry>
@@ -135,6 +169,26 @@
       </tags>
   </entry>
   <entry>
+    <title>Transaction</title>
+    <url>/2022/01/05/Transaction/</url>
+    <content><![CDATA[<h2 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h2><p>Adding the <code>@Transactional</code> annotation at the class level or method level.</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PayServiceImpl</span> <span class="keyword">implements</span> <span class="title">IPayService</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 省略方法...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h2><p>Spring will create a <code>Proxy</code> class by AOP when detects the Annotated class/method runs, it will:</p>
+<ol>
+    <li>start the transaction</li>
+    <li>run the business logic</li>
+    <li>commit the transaction or rollback</li>
+</ol>
+
+<h2 id="Exception-handling"><a href="#Exception-handling" class="headerlink" title="Exception handling"></a>Exception handling</h2><p>If <code>RunTimeException</code> thrown, the <code>Proxy</code> will roll back the transaction, otherwise(no exception thrown or no-RunTimeException thrown), the <code>Proxy</code> will commit the transaction.<br>But you can also rollback the transaction by <code>rollbackFor</code> property, for example:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Transactional(propagation= Propagation.REQUIRED, rollbackFor= PayException.class)</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>Spring</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>醋溜白菜</title>
     <url>/2021/12/19/%E9%86%8B%E6%BA%9C%E7%99%BD%E8%8F%9C/</url>
     <content><![CDATA[<h2 id="醋溜白茶"><a href="#醋溜白茶" class="headerlink" title="醋溜白茶"></a>醋溜白茶</h2><ol>
@@ -163,40 +217,6 @@
 ]]></content>
       <tags>
         <tag>菜谱</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Entity Lifecycle</title>
-    <url>/2021/12/27/Entity-Lifecycle/</url>
-    <content><![CDATA[<h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><h3 id="Persistence-Context"><a href="#Persistence-Context" class="headerlink" title="Persistence Context"></a>Persistence Context</h3><p><strong>Persistence Context</strong> is the middle layer between Database with Business Code. It’s a staging area for:</p>
-<ul>
-    <li>Convert the Database Row to Entity.</li>
-    <li>Ready for the Client to read Entity.</li>
-    <li>The alerted Entity by business code.</li>
-</ul>
-
-<h3 id="Lifecycle"><a href="#Lifecycle" class="headerlink" title="Lifecycle"></a>Lifecycle</h3><h4 id="Managed-Entity"><a href="#Managed-Entity" class="headerlink" title="Managed Entity"></a>Managed Entity</h4><p>A managed entity is a representation of a database table row.</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Session session = sessionFactory.openSession();</span><br><span class="line">assertThat(getManagedEntities(session)).isEmpty();</span><br><span class="line"></span><br><span class="line">List&lt;FootballPlayer&gt; players = s.createQuery(<span class="string">&quot;from FootballPlayer&quot;</span>).getResultList();</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
-
-<h4 id="Detached-Entity"><a href="#Detached-Entity" class="headerlink" title="Detached Entity"></a>Detached Entity</h4><p>A detached entity is a Entity POJO corresponds to a decision table row, but not tracked by the Persistence Context.<br>A managed entity can converted into detached entity by below ways:</p>
-<ol>
-    <li>The Session creates the entity is closed.</li>
-    <li>Call Session.evict(entity) or Session.clear()</li>
-</ol>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">FootballPlayer cr7 = session.get(FootballPlayer.class, <span class="number">1L</span>);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">1</span>);</span><br><span class="line">assertThat(getManagedEntities(session).get(<span class="number">0</span>).getId()).isEqualTo(cr7.getId());</span><br><span class="line"></span><br><span class="line">session.evict(cr7);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
-
-<p>But when <code>Session.update()</code> or <code>Session.merge()</code> called, the entity will be tracked by Persistence Context again.</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">FootballPlayer messi = session.get(FootballPlayer.class, <span class="number">2L</span>);</span><br><span class="line"></span><br><span class="line">session.evict(messi);</span><br><span class="line">messi.setName(<span class="string">&quot;Leo Messi&quot;</span>);</span><br><span class="line">transaction.commit();</span><br><span class="line"></span><br><span class="line">assertThat(getDirtyEntities()).isEmpty();</span><br><span class="line"></span><br><span class="line">transaction = startTransaction(session);</span><br><span class="line">session.update(messi);</span><br><span class="line">transaction.commit();</span><br><span class="line"></span><br><span class="line">assertThat(getDirtyEntities()).size().isEqualTo(<span class="number">1</span>);</span><br><span class="line">assertThat(getDirtyEntities().get(<span class="number">0</span>).getName()).isEqualTo(<span class="string">&quot;Leo Messi&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<h3 id="Transient-entity"><a href="#Transient-entity" class="headerlink" title="Transient entity"></a>Transient entity</h3><p>A entity POJO that not exist in the Persistent Context store and not managed.<br>A typical example is to create a instance by constructor.<br>To make a transient entity persistent, we need to call <code>Session.save(entity)</code> or <code>Session.saveOrUpdate(entity)</code>:</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">FootballPlayer neymar = <span class="keyword">new</span> FootballPlayer();</span><br><span class="line">neymar.setName(<span class="string">&quot;Neymar&quot;</span>);</span><br><span class="line">session.save(neymar);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session)).size().isEqualTo(<span class="number">1</span>);</span><br><span class="line">assertThat(neymar.getId()).isNotNull();</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> count = queryCount(<span class="string">&quot;select count(*) from Football_Player where name=&#x27;Neymar&#x27;&quot;</span>);</span><br><span class="line"></span><br><span class="line">assertThat(count).isEqualTo(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">transaction.commit();</span><br><span class="line">count = queryCount(<span class="string">&quot;select count(*) from Football_Player where name=&#x27;Neymar&#x27;&quot;</span>);</span><br><span class="line"></span><br><span class="line">assertThat(count).isEqualTo(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
-
-<h3 id="Deleted-Entity"><a href="#Deleted-Entity" class="headerlink" title="Deleted Entity"></a>Deleted Entity</h3><p><code>Session.delete</code> is called.</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">session.delete(neymar);</span><br><span class="line"></span><br><span class="line">assertThat(getManagedEntities(session).get(<span class="number">0</span>).getStatus()).isEqualTo(Status.DELETED);</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>Database</tag>
       </tags>
   </entry>
 </search>
