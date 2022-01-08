@@ -137,14 +137,14 @@
 
   
   <url>
-    <loc>http://opsmilesum.github.io/tags/Blog/</loc>
+    <loc>http://opsmilesum.github.io/tags/Email/</loc>
     <lastmod>2022-01-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://opsmilesum.github.io/tags/Email/</loc>
+    <loc>http://opsmilesum.github.io/tags/Blog/</loc>
     <lastmod>2022-01-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
