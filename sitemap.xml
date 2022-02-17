@@ -182,13 +182,6 @@
 
   
   <url>
-    <loc>http://opsmilesum.github.io/tags/git/</loc>
-    <lastmod>2022-02-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://opsmilesum.github.io/tags/Email/</loc>
     <lastmod>2022-02-17</lastmod>
     <changefreq>weekly</changefreq>
@@ -203,14 +196,14 @@
   </url>
   
   <url>
-    <loc>http://opsmilesum.github.io/tags/Spring/</loc>
+    <loc>http://opsmilesum.github.io/tags/Git/</loc>
     <lastmod>2022-02-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://opsmilesum.github.io/tags/Git/</loc>
+    <loc>http://opsmilesum.github.io/tags/Spring/</loc>
     <lastmod>2022-02-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
